@@ -120,16 +120,15 @@ class LinkedList
      */
     public function append(mixed $data)
     {
-        if ($this->isEmpty())
-        {
+        if ($this->isEmpty()) {
             $this->insertFirst($data);
-        }
-        else
-        {
+        } 
+        else {  
             $newNode = new Node($data);
             $this->last->setNext($newNode);
             $this->last = $newNode;
         }
+
         $this->count++;
     }
 
@@ -142,16 +141,15 @@ class LinkedList
      */
     public function prepend(mixed $data)
     {
-        if ($this->isEmpty())
-        {
+        if ($this->isEmpty()) {
             $this->insertFirst($data);
-        }
-        else
-        {
+        } 
+        else {
             $node = new Node($data);
             $node->setNext($this->first);
             $this->first = $node;
         }
+
         $this->count++;
         
     }
@@ -162,34 +160,32 @@ class LinkedList
      * @param int $index The index where the data will be inserted.
      * @param mixed $data The  data that will be inserted.
      * 
+     * @throws OutOfBoundsException
+     * 
      * @return void
      */
     public function insert(int $index, mixed $data)
     {
-        if ($index < 0 || $index > $this->count)
-        {
-            throw new Exception("Index out of bounds.");
+        if ($index < 0 || $index > $this->count)  {
+            throw new OutOfBoundsException("Index out of bounds.");
         }
 
-        if ($index == 0)
-        {
+        if ($index === 0) {
             $this->prepend($data);
-        }
-        elseif ($index == $this->count)
-        {
+        } 
+        elseif ($index === $this->count) {
             $this->append($data);
-        }
-        else
-        {
+        } 
+        else {
             $node = new Node($data);
             $current = $this->first;
             $prev = null;
 
-            for ($i=0; $i < $index; $i++) 
-            { 
+            for ($i=0; $i < $index; $i++) { 
                 $prev = $current;
                 $current = $current->getNext();
             }
+
             $node->setNext($current);
             $prev->setNext($node);
 
@@ -206,17 +202,16 @@ class LinkedList
      */
     public function get(int $index)
     {
-        if ($index < 0 || $index > $this->count)
-        {
+        if ($index < 0 || $index > $this->count) {
             throw new Exception("Index out of bounds.");
         }
 
         $current = $this->first;
 
-        for ($i=0; $i < $index; $i++) 
-        { 
+        for ($i=0; $i < $index; $i++) { 
             $current = $current->getNext();
         }
+
         return $current;
     }
 
@@ -251,7 +246,7 @@ class LinkedList
      */
     public function isEmpty()
     {
-        return $this->count == 0 ? True : False;
+        return $this->count === 0 ? True : False;
     }
 
     /**
@@ -264,10 +259,8 @@ class LinkedList
         $output = '';
         $current = $this->first;
 
-        while ($current != null)
-        {
+        while ($current !== null) {
             $output .= $current->getData() . PHP_EOL;
-
             $current = $current->getNext();
         }
 
