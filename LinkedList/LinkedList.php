@@ -9,7 +9,6 @@ class Node
      */
     private $data;
 
-
     /**
      * @var Node $next
      * 
@@ -34,7 +33,6 @@ class Node
         $this->data = $data;
     }
 
-
     /**
      * Stores the reference to the next Node of the list.
      * 
@@ -45,7 +43,6 @@ class Node
         $this->next = $next;
     }
 
-
     /**
      * Returns the data stored in the Node.
      * 
@@ -55,7 +52,6 @@ class Node
     {
         return $this->data;
     }
-
 
     /**
      * Returns the reference of the next Node.
@@ -87,14 +83,12 @@ class LinkedList
      */
     private $first;
 
-
     /**
      * @var Node $last
      * 
      * Stores the reference to the last Node of the list.
      */
     private $last;
-
 
     /**
      * @var int $count
@@ -110,7 +104,6 @@ class LinkedList
         $this->last = null;
         $this->count = 0;
     }
-
 
     /**
      * Inserts the data passed at the end of the list.
@@ -128,10 +121,8 @@ class LinkedList
             $this->last->setNext($newNode);
             $this->last = $newNode;
         }
-
         $this->count++;
     }
-
 
     /**
      * Inserts the data passed at the beginning of the list.
@@ -149,9 +140,7 @@ class LinkedList
             $node->setNext($this->first);
             $this->first = $node;
         }
-
-        $this->count++;
-        
+        $this->count++; 
     }
 
     /**
@@ -190,8 +179,7 @@ class LinkedList
             $prev->setNext($node);
 
             $this->count++;
-        }
-            
+        }    
     }
 
     /**
@@ -211,7 +199,6 @@ class LinkedList
         for ($i=0; $i < $index; $i++) { 
             $current = $current->getNext();
         }
-
         return $current;
     }
 
@@ -227,7 +214,6 @@ class LinkedList
         $this->count = 0;
     }
 
-
     /**
      * Return the number os elements in the list.
      * 
@@ -237,7 +223,6 @@ class LinkedList
     {
         return $this->count;
     }
-
 
     /**
      * Return True if the list is empty and False if it has any elements.
@@ -263,7 +248,6 @@ class LinkedList
             $output .= $current->getData() . PHP_EOL;
             $current = $current->getNext();
         }
-
         return $output;
     }
 
@@ -277,5 +261,4 @@ class LinkedList
         $this->first = new Node($data);
         $this->last = $this->first;
     }
-
 }
