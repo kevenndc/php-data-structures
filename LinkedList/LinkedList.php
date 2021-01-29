@@ -187,11 +187,14 @@ class LinkedList
      * 
      * @param $index The index of the element that should be returned
      * 
+     * @throws OutOfBoundsException
+     * 
+     * @return Node
      */
     public function get(int $index)
     {
-        if ($index < 0 || $index > $this->count) {
-            throw new Exception("Index out of bounds.");
+        if ($index < 0 || $index > $this->count || $this->isEmpty()) {
+            throw new OutOfBoundsException("Index out of bounds.");
         }
 
         $current = $this->first;
@@ -231,7 +234,7 @@ class LinkedList
      */
     public function isEmpty()
     {
-        return $this->count === 0 ? True : False;
+        return $this->count === 0 ? TRUE : FALSE;
     }
 
     /**
