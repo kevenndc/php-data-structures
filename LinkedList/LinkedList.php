@@ -1,78 +1,6 @@
 <?php
 
-class Node
-{
-    /**
-     * @var mixed $data
-     * 
-     * Stores the data of the current Node.
-     */
-    private $data;
-
-    /**
-     * @var Node $next
-     * 
-     * Stores the reference to the next Node of the list.
-     */
-    private $next;
-
-
-    public function __construct(mixed $data = null)
-    {
-        $this->data = $data;
-        $this->next = null;
-    }
-
-    /**
-     * Stores the data in the current Node.
-     * 
-     * @param mixed $data The data to be stored in the current Node.
-     */
-    public function setData(mixed $data)
-    {
-        $this->data = $data;
-    }
-
-    /**
-     * Stores the reference to the next Node of the list.
-     * 
-     * @param Node $next The next Node in the list that should be referenced.
-     */
-    public function setNext(Node $next)
-    {
-        $this->next = $next;
-    }
-
-    /**
-     * Returns the data stored in the Node.
-     * 
-     * @return mixed
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    /**
-     * Returns the reference of the next Node.
-     * 
-     * @return Node
-     */
-    public function getNext()
-    {
-        return $this->next;
-    }
-
-    /**
-     * Returns a string with the Node data
-     * 
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) $this->data;
-    }
-}
+include __DIR__ . '/Node.php';
 
 class LinkedList
 {
@@ -109,38 +37,52 @@ class LinkedList
      * Inserts the data passed at the end of the list.
      * 
      * @param mixed $data
-     * @return void
+     * @return LinkedList
      */
     public function append(mixed $data)
     {
         if ($this->isEmpty()) {
-            $this->insertFirst($data);
-        } 
-        else {  
-            $newNode = new Node($data);
-            $this->last->setNext($newNode);
-            $this->last = $newNode;
+            return $this->insertFirst($data);
         }
+
+        $newNode = new Node($data);
+        $this->last->setNext($newNode);
+        $this->last = $newNode;
         $this->count++;
+        return $this;
+    }
+
+    /**
+     * Utility function for inserting the first element in the list if the list is empty.
+     * 
+     * @param Node $data The data to be inserted in the first Node.
+     */
+    private function insertFirst(mixed $data)
+    {
+        $this->first = new Node($data);
+        $this->last = $this->first;
+        $this->count++;
+        return $this;
     }
 
     /**
      * Inserts the data passed at the beginning of the list.
      * 
      * @param mixed $data The data to be inserted at the beginning of the list
-     * @return void
+     * @return LinkedList
      */
     public function prepend(mixed $data)
     {
         if ($this->isEmpty()) {
-            $this->insertFirst($data);
-        } 
-        else {
-            $node = new Node($data);
-            $node->setNext($this->first);
-            $this->first = $node;
+            return $this->insertFirst($data);
         }
-        $this->count++; 
+
+        $node = new Node($data);
+        $node->setNext($this->first);
+        $this->first = $node;
+        $this->count++;
+        
+        return $this;
     }
 
     /**
@@ -160,26 +102,32 @@ class LinkedList
         }
 
         if ($index === 0) {
-            $this->prepend($data);
+            return $this->prepend($data);
         } 
-        elseif ($index === $this->count) {
-            $this->append($data);
-        } 
-        else {
-            $node = new Node($data);
-            $current = $this->first;
-            $prev = null;
 
-            for ($i=0; $i < $index; $i++) { 
-                $prev = $current;
-                $current = $current->getNext();
-            }
+        if ($index === $this->count) {
+            return $this->append($data);
+        }
 
-            $node->setNext($current);
-            $prev->setNext($node);
+        $this->insertInTheMiddle($data, $index);
 
-            $this->count++;
-        }    
+        return $this;
+    }
+
+    private function insertInTheMiddle($data, $index) 
+    {
+        $newNode = new Node($data);
+        $current = $this->first;
+        $prev = null;
+
+        for ($i = 0; $i < $index; $i++) { 
+            $prev = $current;
+            $current = $current->getNext();
+        }
+
+        $newNode->setNext($current);
+        $prev->setNext($newNode);
+        $this->count++;
     }
 
     /**
@@ -199,10 +147,26 @@ class LinkedList
 
         $current = $this->first;
 
-        for ($i=0; $i < $index; $i++) { 
+        for ($i = 0; $i < $index; $i++) { 
             $current = $current->getNext();
         }
+
         return $current;
+    }
+
+    public function indexOf($data)
+    {
+        $current = $this->first;
+
+        for ($i = 0; $i < $this->count; $i++) {
+            if ($data === $current->getData()) {
+                return $i;
+            }
+
+            $current = $current->getNext();
+        }
+
+        return false;
     }
 
      /**
@@ -234,7 +198,7 @@ class LinkedList
      */
     public function isEmpty()
     {
-        return $this->count === 0 ? TRUE : FALSE;
+        return $this->count === 0;
     }
 
     /**
@@ -244,24 +208,18 @@ class LinkedList
      */
     public function __toString()
     {
-        $output = '';
+        $items = '';
         $current = $this->first;
+        $index = 0;
 
-        while ($current !== null) {
-            $output .= $current->getData() . PHP_EOL;
+        for ($i = 0; $index < $this->count; $i++) {
+            $items .= "\t [$index] => {$current->getData()}" . PHP_EOL;
             $current = $current->getNext();
+            $index++;
         }
-        return $output;
+
+        return "LinkedList {\n $items }";
     }
 
-    /**
-     * Utility function for inserting the first element in the list if the list is empty.
-     * 
-     * @param Node $data The data to be inserted in the first Node.
-     */
-    private function insertFirst(mixed $data)
-    {
-        $this->first = new Node($data);
-        $this->last = $this->first;
-    }
+    
 }
