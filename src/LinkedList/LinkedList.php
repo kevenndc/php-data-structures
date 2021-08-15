@@ -11,21 +11,21 @@ class LinkedList
      * 
      * Stores the reference to the first Node of the list.
      */
-    private $first;
+    private Node $first;
 
     /**
      * @var Node $last
      * 
      * Stores the reference to the last Node of the list.
      */
-    private $last;
+    private Node $last;
 
     /**
      * @var int $count
      * 
      * Stores the current number of elements in the list.
      */
-    private $count;
+    private int $count;
 
 
     public function __construct()
@@ -41,7 +41,7 @@ class LinkedList
      * @param mixed $data
      * @return LinkedList
      */
-    public function append(mixed $data)
+    public function append(mixed $data): LinkedList
     {
         if ($this->isEmpty()) {
             return $this->insertFirst($data);
@@ -60,7 +60,7 @@ class LinkedList
      * 
      * @param Node $data The data to be inserted in the first Node.
      */
-    private function insertFirst(mixed $data)
+    private function insertFirst(mixed $data): LinkedList
     {
         $this->first = new Node($data);
         $this->last = $this->first;
@@ -75,7 +75,7 @@ class LinkedList
      * @param mixed $data The data to be inserted at the beginning of the list
      * @return LinkedList
      */
-    public function prepend(mixed $data)
+    public function prepend(mixed $data): LinkedList
     {
         if ($this->isEmpty()) {
             return $this->insertFirst($data);
@@ -99,10 +99,10 @@ class LinkedList
      * 
      * @return void
      */
-    public function insert(int $index, mixed $data)
+    public function insert(int $index, mixed $data): LinkedList
     {
         if ($index < 0 || $index > $this->count)  {
-            throw new OutOfBoundsException("Index out of bounds.");
+            throw new \OutOfBoundsException("Index out of bounds.");
         }
 
         if ($index === 0) {
@@ -113,9 +113,7 @@ class LinkedList
             return $this->append($data);
         }
 
-        $this->insertInTheMiddle($data, $index);
-
-        return $this;
+        return $this->insertInTheMiddle($data, $index);
     }
 
     private function insertInTheMiddle($data, $index) 
@@ -132,6 +130,8 @@ class LinkedList
         $newNode->setNext($current);
         $prev->setNext($newNode);
         $this->count++;
+
+        return $this;
     }
 
     /**
@@ -143,10 +143,10 @@ class LinkedList
      * 
      * @return Node
      */
-    public function get(int $index)
+    public function get(int $index): mixed
     {
         if ($index < 0 || $index > $this->count || $this->isEmpty()) {
-            throw new OutOfBoundsException("Index out of bounds.");
+            throw new \OutOfBoundsException("Index out of bounds.");
         }
 
         $current = $this->first;
@@ -155,7 +155,7 @@ class LinkedList
             $current = $current->getNext();
         }
 
-        return $current;
+        return $current->getData();
     }
 
     /**
@@ -164,7 +164,7 @@ class LinkedList
      * @param mixed $data
      * @return int|false
      */
-    public function indexOf($data)
+    public function indexOf($data): int
     {
         $current = $this->first;
 
@@ -196,7 +196,7 @@ class LinkedList
      * 
      * @return int
      */
-    public function size()
+    public function size(): int
     {
         return $this->count;
     }
@@ -206,7 +206,7 @@ class LinkedList
      * 
      * @return bool
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return $this->count === 0;
     }
@@ -216,7 +216,7 @@ class LinkedList
      * 
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $items = '';
         $current = $this->first;

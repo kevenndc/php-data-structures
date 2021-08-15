@@ -9,14 +9,14 @@ class Node
      * 
      * Stores the data of the current Node.
      */
-    private $data;
+    private mixed $data;
 
     /**
      * @var Node $next
      * 
      * Stores the reference to the next Node of the list.
      */
-    private $next;
+    private Node $next;
 
 
     public function __construct(mixed $data = null)
@@ -29,6 +29,8 @@ class Node
      * Stores the data in the current Node.
      * 
      * @param mixed $data The data to be stored in the current Node.
+     * 
+     * @return void
      */
     public function setData(mixed $data)
     {
@@ -39,6 +41,8 @@ class Node
      * Stores the reference to the next Node of the list.
      * 
      * @param Node $next The next Node in the list that should be referenced.
+     * 
+     * @return void
      */
     public function setNext(Node $next)
     {
@@ -50,7 +54,7 @@ class Node
      * 
      * @return mixed
      */
-    public function getData()
+    public function getData(): mixed
     {
         return $this->data;
     }
@@ -60,7 +64,7 @@ class Node
      * 
      * @return Node
      */
-    public function getNext()
+    public function getNext(): Node
     {
         return $this->next;
     }
@@ -70,7 +74,7 @@ class Node
      * 
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->data;
     }
