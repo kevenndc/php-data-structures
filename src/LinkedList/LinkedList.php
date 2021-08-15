@@ -3,6 +3,7 @@
 namespace Kvnn\LinkedList;
 
 use Countable;
+use InvalidArgumentException;
 use IteratorAggregate;
 use Kvnn\LinkedList\Node;
 
@@ -42,6 +43,19 @@ class LinkedList implements IteratorAggregate, Countable
         return new LinkedListIterator($this);
     }
 
+    public function fromArray(array $array)
+    {
+        if (count($array) <= 0) {
+            throw new InvalidArgumentException('The array must have at least one element.');
+        }
+
+        foreach ($array as $item) {
+            $this->append($item);
+        }
+
+        return $this;
+    }
+
     /**
      * Inserts the data passed at the end of the list.
      * 
@@ -65,7 +79,7 @@ class LinkedList implements IteratorAggregate, Countable
     /**
      * Utility function for inserting the first element in the list if the list is empty.
      * 
-     * @param Node $data The data to be inserted in the first Node.
+     * @param mixed $data The data to be inserted in the first Node.
      */
     private function insertFirst(mixed $data): LinkedList
     {
@@ -148,7 +162,7 @@ class LinkedList implements IteratorAggregate, Countable
      * 
      * @throws OutOfBoundsException
      * 
-     * @return Node
+     * @return mixed
      */
     public function get(int $index): mixed
     {
@@ -158,11 +172,14 @@ class LinkedList implements IteratorAggregate, Countable
 
         $current = $this->first;
 
-        for ($i = 0; $i < $index; $i++) { 
+        for ($i = 0; $i < $index; $i++) {
+            if ($current->getNext() === null) {
+                return null;
+            }
             $current = $current->getNext();
         }
 
-        return $current;
+        return $current->getData();
     }
 
     /**
@@ -183,7 +200,7 @@ class LinkedList implements IteratorAggregate, Countable
             $current = $current->getNext();
         }
 
-        return false;
+        return -1;
     }
 
      /**
@@ -216,6 +233,47 @@ class LinkedList implements IteratorAggregate, Countable
     public function isEmpty(): bool
     {
         return $this->length === 0;
+    }
+
+    public function first(): mixed
+    {
+        return $this->first;
+    }
+
+    public function last(): mixed
+    {
+        return $this->last;
+    }
+
+    public function exists(mixed $data): bool
+    {
+        return $this->indexOf($data) > -1;
+    }
+
+    public function remove(mixed $data)
+    {
+        $current = $this->first;
+
+        if ($current->getData() === $data) {
+            $this->first = $current->getNext();
+            $this->length--;
+            return $this;
+        }
+
+        $prev = null;
+
+        while ($current->getData() !== $data) {
+            if ($current === null) {
+                return -1;
+            }
+
+            $prev = $current;
+            $current = $current->getNext();
+        }
+
+        $prev->setNext($current->getNext());
+        $this->length--;
+        return $this;
     }
 
     /**

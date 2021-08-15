@@ -37,6 +37,10 @@ class LinkedListIterator implements Iterator
 
     public function valid()
     {
-        return $this->list->get($this->currentIndex) !== null;
+        try {
+            return $this->list->get($this->currentIndex) !== null;
+        } catch (\OutOfBoundsException $e) {
+            return false;
+        }
     }
 }
