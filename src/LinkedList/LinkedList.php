@@ -2,37 +2,44 @@
 
 namespace Kvnn\LinkedList;
 
+use Countable;
+use IteratorAggregate;
 use Kvnn\LinkedList\Node;
 
-class LinkedList
+class LinkedList implements IteratorAggregate, Countable
 {
     /**
      * @var Node $first
      * 
      * Stores the reference to the first Node of the list.
      */
-    private Node $first;
+    private ?Node $first;
 
     /**
      * @var Node $last
      * 
      * Stores the reference to the last Node of the list.
      */
-    private Node $last;
+    private ?Node $last;
 
     /**
-     * @var int $count
+     * @var int $length
      * 
      * Stores the current number of elements in the list.
      */
-    private int $count;
+    private int $length;
 
 
     public function __construct()
     {
         $this->first = null;
         $this->last = null;
-        $this->count = 0;
+        $this->length = 0;
+    }
+
+    public function getIterator()
+    {
+        return new LinkedListIterator($this);
     }
 
     /**
@@ -50,7 +57,7 @@ class LinkedList
         $newNode = new Node($data);
         $this->last->setNext($newNode);
         $this->last = $newNode;
-        $this->count++;
+        $this->length++;
 
         return $this;
     }
@@ -64,7 +71,7 @@ class LinkedList
     {
         $this->first = new Node($data);
         $this->last = $this->first;
-        $this->count++;
+        $this->length++;
 
         return $this;
     }
@@ -84,7 +91,7 @@ class LinkedList
         $node = new Node($data);
         $node->setNext($this->first);
         $this->first = $node;
-        $this->count++;
+        $this->length++;
         
         return $this;
     }
@@ -101,7 +108,7 @@ class LinkedList
      */
     public function insert(int $index, mixed $data): LinkedList
     {
-        if ($index < 0 || $index > $this->count)  {
+        if ($index < 0 || $index > $this->length)  {
             throw new \OutOfBoundsException("Index out of bounds.");
         }
 
@@ -109,7 +116,7 @@ class LinkedList
             return $this->prepend($data);
         } 
 
-        if ($index === $this->count) {
+        if ($index === $this->length) {
             return $this->append($data);
         }
 
@@ -129,7 +136,7 @@ class LinkedList
 
         $newNode->setNext($current);
         $prev->setNext($newNode);
-        $this->count++;
+        $this->length++;
 
         return $this;
     }
@@ -145,7 +152,7 @@ class LinkedList
      */
     public function get(int $index): mixed
     {
-        if ($index < 0 || $index > $this->count || $this->isEmpty()) {
+        if ($index < 0 || $index > $this->length || $this->isEmpty()) {
             throw new \OutOfBoundsException("Index out of bounds.");
         }
 
@@ -155,7 +162,7 @@ class LinkedList
             $current = $current->getNext();
         }
 
-        return $current->getData();
+        return $current;
     }
 
     /**
@@ -168,7 +175,7 @@ class LinkedList
     {
         $current = $this->first;
 
-        for ($i = 0; $i < $this->count; $i++) {
+        for ($i = 0; $i < $this->length; $i++) {
             if ($data === $current->getData()) {
                 return $i;
             }
@@ -188,7 +195,7 @@ class LinkedList
     {
         $this->first = null;
         $this->last = null;
-        $this->count = 0;
+        $this->length = 0;
     }
 
     /**
@@ -196,9 +203,9 @@ class LinkedList
      * 
      * @return int
      */
-    public function size(): int
+    public function count(): int
     {
-        return $this->count;
+        return $this->length;
     }
 
     /**
@@ -208,7 +215,7 @@ class LinkedList
      */
     public function isEmpty(): bool
     {
-        return $this->count === 0;
+        return $this->length === 0;
     }
 
     /**
@@ -222,7 +229,7 @@ class LinkedList
         $current = $this->first;
         $index = 0;
 
-        for ($i = 0; $index < $this->count; $i++) {
+        for ($i = 0; $index < $this->length; $i++) {
             $items .= "\t [$index] => {$current->getData()}" . PHP_EOL;
             $current = $current->getNext();
             $index++;
@@ -230,6 +237,4 @@ class LinkedList
 
         return "LinkedList {\n $items }";
     }
-
-    
 }

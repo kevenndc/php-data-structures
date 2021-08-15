@@ -16,7 +16,7 @@ class Node
      * 
      * Stores the reference to the next Node of the list.
      */
-    private Node $next;
+    private ?Node $next;
 
 
     public function __construct(mixed $data = null)
@@ -62,9 +62,9 @@ class Node
     /**
      * Returns the reference of the next Node.
      * 
-     * @return Node
+     * @return Node|null
      */
-    public function getNext(): Node
+    public function getNext(): ?Node
     {
         return $this->next;
     }
